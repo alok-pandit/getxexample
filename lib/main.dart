@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getxexample/controllers/global_controller.dart';
 import 'package:getxexample/routes/login.dart';
+import 'package:getxexample/utils/translation_strings.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
+
+  final GlobalController gc = Get.put(GlobalController());
 
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        enableLog: true, defaultTransition: Transition.fade, home: Login());
+        enableLog: true,
+        translations: TranslationStrings(),
+        locale: const Locale('en', 'US'),
+        defaultTransition: Transition.rightToLeftWithFade,
+        home: Login());
   }
 }

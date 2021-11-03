@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getxexample/controllers/global_controller.dart';
 import 'package:getxexample/controllers/login_controller.dart';
 import 'package:getxexample/routes/home.dart';
 
@@ -14,6 +15,7 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        // resizeToAvoidBottomInset: false,
         appBar: AppBar(title: const Text('Login')),
         body: Form(
           key: formKey,
@@ -25,43 +27,57 @@ class Login extends StatelessWidget {
                 padding: EdgeInsets.all(10),
                 child: SizedBox(height: 135, width: 135, child: FlutterLogo()),
               ),
-              Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: TextFormField(
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Enter Email'),
-                      // controller: email,
-                      onChanged: (val) {
-                        loginController.updateEmail(val);
-                      },
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: (value) {
-                        if (!GetUtils.isEmail(value!)) {
-                          return "Email is not valid";
-                        } else {
-                          return null;
-                        }
-                      })),
-              Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: TextFormField(
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Enter Password'),
-                      // controller: pass,
-                      onChanged: (val) {
-                        loginController.updatePass(val);
-                      },
-                      obscureText: true,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: (value) {
-                        if (!GetUtils.isLengthGreaterThan(value!, 5)) {
-                          return "Password is not valid";
-                        } else {
-                          return null;
-                        }
-                      })),
+              Obx(
+                () => Directionality(
+                  textDirection: Get.find<GlobalController>().isArabic.value
+                      ? TextDirection.rtl
+                      : TextDirection.ltr,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: TextFormField(
+                        decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Enter Email'),
+                        // controller: email,
+                        onChanged: (val) {
+                          loginController.updateEmail(val);
+                        },
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (value) {
+                          if (!GetUtils.isEmail(value!)) {
+                            return "Email is not valid";
+                          } else {
+                            return null;
+                          }
+                        }),
+                  ),
+                ),
+              ),
+              Obx(
+                () => Directionality(
+                  textDirection: Get.find<GlobalController>().isArabic.value
+                      ? TextDirection.rtl
+                      : TextDirection.ltr,
+                  child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: TextFormField(
+                          decoration: const InputDecoration(
+                              border: OutlineInputBorder(), hintText: 'pwdPH'),
+                          // controller: pass,
+                          onChanged: (val) {
+                            loginController.updatePass(val);
+                          },
+                          obscureText: true,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: (value) {
+                            if (!GetUtils.isLengthGreaterThan(value!, 5)) {
+                              return "Password is not valid";
+                            } else {
+                              return null;
+                            }
+                          })),
+                ),
+              ),
               Padding(
                   padding: const EdgeInsets.all(12),
                   child: ElevatedButton(
@@ -70,7 +86,7 @@ class Login extends StatelessWidget {
                               {
                                 // pass.text = '',
                                 // email.text = '',
-                                Get.off(() => Home())
+                                Get.offAll(() => const Home())
                               }
                             else
                               {
@@ -84,7 +100,36 @@ class Login extends StatelessWidget {
                                         hours: 0, minutes: 0, seconds: 10))
                               }
                           },
-                      child: const Text('Login')))
+                      child: Text('login'.tr))),
+              SizedBox(
+                child: ValueBuilder<bool?>(
+                  initialValue: Get.find<GlobalController>().isArabic.value,
+                  builder: (isChecked, updateFn) {
+                    return Directionality(
+                      textDirection: TextDirection.ltr,
+                      child: Switch(
+                          activeColor: Colors.white,
+                          activeTrackColor: Colors.grey,
+                          value: isChecked!,
+                          onChanged: (newValue) {
+                            Get.find<GlobalController>().isArabic.value =
+                                newValue;
+                            Locale locale;
+                            if (newValue) {
+                              locale = const Locale('ar', 'AE');
+                            } else {
+                              locale = const Locale('en', 'US');
+                            }
+                            Get.updateLocale(locale);
+                            updateFn(newValue);
+                          }),
+                    );
+                  },
+                ),
+              ),
+              Obx(() => Text(Get.find<GlobalController>().isArabic.value
+                  ? 'Switch to English'
+                  : 'قم بالتبديل إلى اللغة العربية'))
             ],
           ),
         ));
