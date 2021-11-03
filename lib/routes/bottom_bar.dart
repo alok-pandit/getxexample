@@ -26,7 +26,7 @@ class BottomBarState extends State<BottomBar>
   void initState() {
     super.initState();
 
-    for (int i = 1; i <= 250; i++) {
+    for (int i = 1; i <= 15; i++) {
       listings.add(i.toString());
     }
 
@@ -113,12 +113,18 @@ class BottomBarState extends State<BottomBar>
                 ),
                 Container(
                   color: Colors.brown,
-                  child: Center(
-                    child: Container(
-                        height: 150,
-                        alignment: Alignment.topLeft,
-                        decoration: const BoxDecoration(color: Colors.amber),
-                        child: ListComponent(listings)),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                            height: 150,
+                            alignment: Alignment.topLeft,
+                            decoration:
+                                const BoxDecoration(color: Colors.amber),
+                            child: ListComponent(listings)),
+                      )
+                    ],
                   ),
                 ),
               ],

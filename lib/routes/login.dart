@@ -101,30 +101,26 @@ class Login extends StatelessWidget {
                               }
                           },
                       child: Text('login'.tr))),
-              SizedBox(
-                child: ValueBuilder<bool?>(
-                  initialValue: Get.find<GlobalController>().isArabic.value,
-                  builder: (isChecked, updateFn) {
-                    return Directionality(
-                      textDirection: TextDirection.ltr,
-                      child: Switch(
-                          activeColor: Colors.white,
-                          activeTrackColor: Colors.grey,
-                          value: isChecked!,
-                          onChanged: (newValue) {
-                            Get.find<GlobalController>().isArabic.value =
-                                newValue;
-                            Locale locale;
-                            if (newValue) {
-                              locale = const Locale('ar', 'AE');
-                            } else {
-                              locale = const Locale('en', 'US');
-                            }
-                            Get.updateLocale(locale);
-                            updateFn(newValue);
-                          }),
-                    );
-                  },
+              Directionality(
+                textDirection: TextDirection.ltr,
+                child: SizedBox(
+                  child: Obx(
+                    () => Switch(
+                        // activeColor: Colors.white,
+                        // activeTrackColor: Colors.grey,
+                        value: Get.find<GlobalController>().isArabic.value,
+                        onChanged: (newValue) {
+                          Get.find<GlobalController>().isArabic.value =
+                              newValue;
+                          Locale locale;
+                          if (newValue) {
+                            locale = const Locale('ar', 'AE');
+                          } else {
+                            locale = const Locale('en', 'US');
+                          }
+                          Get.updateLocale(locale);
+                        }),
+                  ),
                 ),
               ),
               Obx(() => Text(Get.find<GlobalController>().isArabic.value
